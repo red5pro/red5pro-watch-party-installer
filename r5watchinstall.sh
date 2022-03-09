@@ -8,9 +8,14 @@
 # tcp: 22,80,443,1935,3478,5080,6262,8443,8554
 # udp: 3478,25000-49999
 #
+# usage:
+# ./r5watchinstall.sh $FQDN
+# example: 
+# ./r5watchinstall.sh watchparty.red5.net
+#
 
-$HOST=$1
-# TODO: add $HOST validation here
+$FQDN=$1
+# TODO: add $FQDN validation here
 
 echo "... updating system ..."
 apt update
@@ -41,13 +46,13 @@ if [ ! -d /usr/local/red5pro ]; then
 fi
 
 # update ports for netinsight compatibility
-if [ -d /usr/local/red5pro/webapps/conf ]; then
+if [ -d /usr/local/red5pro/conf ]; then
   echo "... configuring udp ports for netinsight compatbility ..."
   sed -i 's/port.min=.*/port.min=25000/g' /usr/local/red5pro/conf/webrtc-plugin.properties
   sed -i 's/port.max=.*/port.max=49999/g' /usr/local/red5pro/conf/webrtc-plugin.properties
   systemctl restart red5pro
 else
-  echo "... red5pro webapps installation failed ..."
+  echo "... red5pro installation failed ..."
   exit
 fi
 
@@ -68,7 +73,7 @@ if [ ! -f /etc/turnserver.conf ]; then
   apt install -y coturn
   echo "" >> /etc/turnserver.conf
   echo "listening-ip=0.0.0.0" >> /etc/turnserver.conf
-  echo "external-ip=$HOST" >> /etc/turnserver.conf
+  echo "external-ip=$FQDN" >> /etc/turnserver.conf
   echo "realm=red5.net" >> /etc/turnserver.conf
   echo "listening-port=3478" >> /etc/turnserver.conf
   systemctl enable turnserver
@@ -84,9 +89,9 @@ fi
 # configure red5 for local coturn server
 if [ -d /usr/local/red5pro/webapps/live/script ]; then
   echo "... configuring red5pro for local coturn ..."
-  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:$HOST:3478" }]/g'  /usr/local/red5pro/webapps/live/script/r5pro-publisher-failover.js
-  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:$HOST:3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-subscriber-failover.js
-  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:$HOST:3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-viewer-failover.js
+  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:$FQDN:3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-publisher-failover.js
+  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:$FQDN:3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-subscriber-failover.js
+  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:$FQDN:3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-viewer-failover.js
   systemctl restart red5pro
 else
   echo "... red5pro not installed properly webapps/live/script is missing ..."
@@ -103,10 +108,10 @@ if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
   cd /usr/local/red5pro/webapps/root
   git clone https://github.com/red5pro/red5pro-watch-party.git
   if [ -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
-    sed -i 's/your-host-here/$HOST/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
-    sed -i 's/your-host-here/$HOST/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/static/script/testbed-config.js
+    sed -i 's/your-host-here/$FQDN/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
+    sed -i 's/your-host-here/$FQDN/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/static/script/testbed-config.js
     sed -i 's/port: 443/port: 8443/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
-    sed -i 's/iceServers.*/iceServers = [{ urls: "stun:$HOST:3478" }],/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
+    sed -i 's/iceServers.*/iceServers = [{ urls: "stun:$FQDN:3478" }],/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
   else
     echo "... watch party installation failed ..."
 	exit
