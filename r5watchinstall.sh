@@ -132,9 +132,9 @@ if [ ! -d /usr/local/red5pro-conference-host ]; then
   cd /usr/local/red5pro-conference-host
   echo "... configuring conference host security ..."
   sed -i 's/const useSSL.*/const useSSL = true/g' /usr/local/red5pro-conference-hostindex.js
-  # cert sed -i 
-  # key sed -i
-  # 8443 sed -i
+  sed -i 's/\/cert\/certificate.crt/\/etc\/letsencrypt\/archive\/$FQDN\/fullchain1.pem/g' /usr/local/red5pro-conference-host/index.js
+  sed -i 's/\/cert\/privateKey.key/\/etc\/letsencrypt\/archive\/$FQDN\/privkey1.pem/g' /usr/local/red5pro-conference-host/index.js
+  sed -i 's/port = 443/port = 8443/g' /usr/local/red5pro-conference-host/index.js
   echo "... installing conference host node application ..."
   apt install npm -y
   npm install index.js
