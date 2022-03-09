@@ -35,7 +35,7 @@ fi
 # install red5pro using installer
 if [ ! -d /usr/local/red5pro ]; then
   echo "... installing red5pro ..."
-  sleep 2
+  read -p "... press key to continue ... " -n1 -s
   /root/red5pro-installer/red5proInstaller.sh
 else
   echo "... red5pro already installed ..."
@@ -59,7 +59,7 @@ fi
 # install ssl certificate
 if [ ! -d /etc/letsencrypt/archive ]; then
   echo "... install ssl cert ..."
-  sleep 2
+  read -p "... press key to continue ... " -n1 -s
   /root/red5pro-installer/red5proInstaller.sh
 fi
 if [ ! -d /etc/letsencrypt/archive ]; then
