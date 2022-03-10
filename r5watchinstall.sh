@@ -14,7 +14,7 @@
 # ./r5watchinstall.sh watchparty.red5.net
 #
 
-$FQDN=$1
+FQDN=$1
 # TODO: add $FQDN validation here
 
 echo "... updating system ..."
@@ -22,12 +22,12 @@ apt update
 apt upgrade -y
 
 # install red5pro installer
-if [ ! -d /root/red5pro-installer]; then
+if [ ! -d /root/red5pro-installer ]; then
   echo "... installing red5pro installer ..."
   cd /root
   git clone https://github.com/red5pro/red5pro-installer.git
 fi
-if [ ! -d /root/red5pro-installer]; then
+if [ ! -d /root/red5pro-installer ]; then
   echo "... red5pro installer failed ..."
   exit
 fi
