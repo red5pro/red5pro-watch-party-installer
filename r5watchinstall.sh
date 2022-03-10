@@ -155,7 +155,7 @@ if [ ! -d /usr/local/red5pro-conference-host ]; then
   git clone https://github.com/red5pro/red5pro-conference-host.git
   cd /usr/local/red5pro-conference-host
   echo "... configuring conference host security ..."
-  sed -i 's/const useSSL.*/const useSSL = true/g' /usr/local/red5pro-conference-hostindex.js
+  sed -i 's/const useSSL.*/const useSSL = true/g' /usr/local/red5pro-conference-host/index.js
   sed -i 's/\/cert\/certificate.crt/\/etc\/letsencrypt\/archive\/'"$FQDN"'\/fullchain1.pem/g' /usr/local/red5pro-conference-host/index.js
   sed -i 's/\/cert\/privateKey.key/\/etc\/letsencrypt\/archive\/'"$FQDN"'\/privkey1.pem/g' /usr/local/red5pro-conference-host/index.js
   sed -i 's/port = 443/port = 8443/g' /usr/local/red5pro-conference-host/index.js
