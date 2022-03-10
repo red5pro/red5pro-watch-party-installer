@@ -8,6 +8,19 @@
 # tcp: 22,80,443,1935,3478,5080,6262,8443,8554
 # udp: 3478,25000-49999
 #
+# /etc/iptables/rules.v4:
+# -A INPUT -p udp --dport 3478 -j ACCEPT
+# -A INPUT -p udp --dport 25000:49999 -j ACCEPT
+# -A INPUT -p tcp -m state --state NEW -m tcp --dport 22 -j ACCEPT
+# -A INPUT -p tcp -m state --state NEW -m tcp --dport 80 -j ACCEPT
+# -A INPUT -p tcp -m state --state NEW -m tcp --dport 443 -j ACCEPT
+# -A INPUT -p tcp -m state --state NEW -m tcp --dport 1935 -j ACCEPT
+# -A INPUT -p tcp -m state --state NEW -m tcp --dport 3478 -j ACCEPT
+# -A INPUT -p tcp -m state --state NEW -m tcp --dport 5080 -j ACCEPT
+# -A INPUT -p tcp -m state --state NEW -m tcp --dport 6262 -j ACCEPT
+# -A INPUT -p tcp -m state --state NEW -m tcp --dport 8443 -j ACCEPT
+# -A INPUT -p tcp -m state --state NEW -m tcp --dport 8554 -j ACCEPT
+#
 # usage:
 # ./r5watchinstall.sh $FQDN
 # example: 
@@ -80,8 +93,9 @@ if [ ! -f /etc/turnserver.conf ]; then
   echo "external-ip=$FQDN" >> /etc/turnserver.conf
   echo "realm=red5.net" >> /etc/turnserver.conf
   echo "listening-port=3478" >> /etc/turnserver.conf
-  systemctl enable turnserver
-  systemctl restart turnserver
+  sed -i 's/#TURNSERVER_ENABLED=1/TURNSERVER_ENABLED=1/g' /etc/default/coturn
+  systemctl enable coturn
+  systemctl restart coturn
 else
   echo "... coturn server already installed ..."
 fi
