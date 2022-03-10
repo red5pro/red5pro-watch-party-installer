@@ -28,7 +28,12 @@
 #
 
 FQDN=$1
-# TODO: add $FQDN validation here
+# $FQDN validation
+if [ -z "$FQDN" ]; then
+  echo "usage: r5watchinstall.sh FQDN"
+  echo "example: ./r5watchinstall.sh watchparty.red5.net"
+  exit
+fi
 
 echo "... updating system ..."
 apt update
