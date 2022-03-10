@@ -36,7 +36,9 @@ fi
 if [ ! -d /usr/local/red5pro ]; then
   echo "... installing red5pro ..."
   read -p "... press key to continue ... " -n1 -s
-  /root/red5pro-installer/red5proInstaller.sh
+  cd /root/red5pro-installer
+  red5proInstaller.sh
+  cd ~
 else
   echo "... red5pro already installed ..."
 fi
@@ -60,7 +62,9 @@ fi
 if [ ! -d /etc/letsencrypt/archive ]; then
   echo "... install ssl cert ..."
   read -p "... press key to continue ... " -n1 -s
-  /root/red5pro-installer/red5proInstaller.sh
+  cd /root/red5pro-installer
+  ./red5proInstaller.sh
+  cd ~
 fi
 if [ ! -d /etc/letsencrypt/archive ]; then
   echo "... install ssl cert failed ..."
@@ -107,6 +111,7 @@ if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
   echo "... installing watch party ..."
   cd /usr/local/red5pro/webapps/root
   git clone https://github.com/red5pro/red5pro-watch-party.git
+  cd ~
   if [ -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
     sed -i 's/your-host-here/$FQDN/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
     sed -i 's/your-host-here/$FQDN/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/static/script/testbed-config.js
@@ -114,7 +119,7 @@ if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
     sed -i 's/iceServers.*/iceServers = [{ urls: "stun:$FQDN:3478" }],/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
   else
     echo "... watch party installation failed ..."
-	exit
+	  exit
   fi
 else
   echo "... watch party already installed ..."
@@ -144,6 +149,7 @@ if [ ! -d /usr/local/red5pro-conference-host ]; then
   pm2 start index.js
   pm2 save
   pm2 startup systemd
+  cd ~
 else
   echo "... red5pro conference host already installed ..."
 fi
