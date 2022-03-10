@@ -37,7 +37,7 @@ if [ ! -d /usr/local/red5pro ]; then
   echo "... installing red5pro ..."
   read -p "... press key to continue ... " -n1 -s
   cd /root/red5pro-installer
-  red5proInstaller.sh
+  ./red5proInstaller.sh
   cd ~
 else
   echo "... red5pro already installed ..."
