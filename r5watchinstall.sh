@@ -112,9 +112,9 @@ fi
 # configure red5 for local coturn server
 if [ -d /usr/local/red5pro/webapps/live/script ]; then
   echo "... configuring red5pro for local coturn ..."
-  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:$FQDN:3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-publisher-failover.js
-  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:$FQDN:3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-subscriber-failover.js
-  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:$FQDN:3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-viewer-failover.js
+  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:'"$FQDN"':3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-publisher-failover.js
+  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:'"$FQDN"':3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-subscriber-failover.js
+  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:'"$FQDN"':3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-viewer-failover.js
   systemctl restart red5pro
 else
   echo "... red5pro not installed properly webapps/live/script is missing ..."
@@ -122,7 +122,7 @@ else
 fi
 
 # install watch party
-if [ -d /usr/local/red5pro/webapps/root ]; then
+if [ ! -d /usr/local/red5pro/webapps/root ]; then
   echo "... red5pro not installed properly webapps/root missing ..."
   exit
 fi
@@ -132,10 +132,10 @@ if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
   git clone https://github.com/red5pro/red5pro-watch-party.git
   cd ~
   if [ -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
-    sed -i 's/your-host-here/$FQDN/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
-    sed -i 's/your-host-here/$FQDN/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/static/script/testbed-config.js
+    sed -i 's/your-host-here/'"$FQDN"'/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
+    sed -i 's/your-host-here/'"$FQDN"'/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/static/script/testbed-config.js
     sed -i 's/port: 443/port: 8443/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
-    sed -i 's/iceServers.*/iceServers = [{ urls: "stun:$FQDN:3478" }],/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
+    sed -i 's/iceServers.*/iceServers = [{ urls: "stun:'"$FQDN"':3478" }],/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
   else
     echo "... watch party installation failed ..."
 	  exit
@@ -156,8 +156,8 @@ if [ ! -d /usr/local/red5pro-conference-host ]; then
   cd /usr/local/red5pro-conference-host
   echo "... configuring conference host security ..."
   sed -i 's/const useSSL.*/const useSSL = true/g' /usr/local/red5pro-conference-hostindex.js
-  sed -i 's/\/cert\/certificate.crt/\/etc\/letsencrypt\/archive\/$FQDN\/fullchain1.pem/g' /usr/local/red5pro-conference-host/index.js
-  sed -i 's/\/cert\/privateKey.key/\/etc\/letsencrypt\/archive\/$FQDN\/privkey1.pem/g' /usr/local/red5pro-conference-host/index.js
+  sed -i 's/\/cert\/certificate.crt/\/etc\/letsencrypt\/archive\/'"$FQDN"'\/fullchain1.pem/g' /usr/local/red5pro-conference-host/index.js
+  sed -i 's/\/cert\/privateKey.key/\/etc\/letsencrypt\/archive\/'"$FQDN"'\/privkey1.pem/g' /usr/local/red5pro-conference-host/index.js
   sed -i 's/port = 443/port = 8443/g' /usr/local/red5pro-conference-host/index.js
   echo "... installing conference host node application ..."
   apt install npm -y
@@ -176,4 +176,5 @@ if [ ! -d /usr/local/red5pro-conference-host ]; then
   echo "... red5pro conference host installation failed ..."
   exit
 fi
+echo "... installation complete ..."
 
