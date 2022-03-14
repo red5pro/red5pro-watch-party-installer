@@ -24,14 +24,14 @@
 # usage:
 # ./r5watchinstall.sh $FQDN
 # example: 
-# ./r5watchinstall.sh watchparty.red5.net
+# ./r5watchinstall.sh watchparty.example.org
 #
 
 FQDN=$1
 # $FQDN validation
 if [ -z "$FQDN" ]; then
   echo "usage: r5watchinstall.sh FQDN"
-  echo "example: ./r5watchinstall.sh watchparty.red5.net"
+  echo "example: ./r5watchinstall.sh watchparty.example.org"
   exit
 fi
 
