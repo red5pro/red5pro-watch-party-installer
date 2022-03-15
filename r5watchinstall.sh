@@ -32,7 +32,7 @@ FQDN=$1
 if [ -z "$FQDN" ]; then
   echo "usage: r5watchinstall.sh FQDN"
   echo "example: ./r5watchinstall.sh watchparty.example.org"
-  exit
+  exit 1
 fi
 
 echo "... updating system ..."
@@ -47,7 +47,7 @@ if [ ! -d /root/red5pro-installer ]; then
 fi
 if [ ! -d /root/red5pro-installer ]; then
   echo "... red5pro installer failed ..."
-  exit
+  exit 2
 fi
 
 # install red5pro using installer
@@ -62,7 +62,7 @@ else
 fi
 if [ ! -d /usr/local/red5pro ]; then
   echo "... red5pro installation failed ..."
-  exit
+  exit 3
 fi
 
 # update ports for netinsight compatibility
@@ -73,7 +73,7 @@ if [ -d /usr/local/red5pro/conf ]; then
   systemctl restart red5pro
 else
   echo "... red5pro installation failed ..."
-  exit
+  exit 4
 fi
 
 # install ssl certificate
@@ -86,7 +86,7 @@ if [ ! -d /etc/letsencrypt/archive ]; then
 fi
 if [ ! -d /etc/letsencrypt/archive ]; then
   echo "... install ssl cert failed ..."
-  exit
+  exit 5
 fi
 
 # install coturn server
@@ -106,7 +106,7 @@ else
 fi
 if [ ! -f /etc/turnserver.conf ]; then
   echo "... coturn server installation failed ..."
-  exit
+  exit 6
 fi
 
 # configure red5 for local coturn server
@@ -118,13 +118,13 @@ if [ -d /usr/local/red5pro/webapps/live/script ]; then
   systemctl restart red5pro
 else
   echo "... red5pro not installed properly webapps/live/script is missing ..."
-  exit
+  exit 7
 fi
 
 # install watch party
 if [ ! -d /usr/local/red5pro/webapps/root ]; then
   echo "... red5pro not installed properly webapps/root missing ..."
-  exit
+  exit 8
 fi
 if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
   echo "... installing watch party ..."
@@ -138,14 +138,14 @@ if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
     sed -i 's/iceServers.*/iceServers:exi [{ urls: "stun:'"$FQDN"':3478" }],/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
   else
     echo "... watch party installation failed ..."
-	  exit
+	  exit 9
   fi
 else
   echo "... watch party already installed ..."
 fi
 if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
   echo "... watch party installation failed ..."
-  exit
+  exit 10
 fi
 
 # install conference host
@@ -174,7 +174,7 @@ else
 fi
 if [ ! -d /usr/local/red5pro-conference-host ]; then
   echo "... red5pro conference host installation failed ..."
-  exit
+  exit 11
 fi
-echo "... installation complete ..."
 
+echo "... installation complete ..."
