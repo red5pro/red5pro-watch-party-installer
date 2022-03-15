@@ -138,7 +138,7 @@ if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
     sed -i 's/iceServers.*/iceServers:exi [{ urls: "stun:'"$FQDN"':3478" }],/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
   else
     echo "... watch party installation failed ..."
-	  exit 9
+    exit 9
   fi
 else
   echo "... watch party already installed ..."
