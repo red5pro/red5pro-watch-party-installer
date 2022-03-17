@@ -135,6 +135,7 @@ if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
     sed -i 's/your-host-here/'"$FQDN"'/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
     sed -i 's/your-host-here/'"$FQDN"'/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/static/script/testbed-config.js
     sed -i 's/iceServers.*/iceServers: [{ urls: "stun:'"$FQDN"':3478" }],/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
+    sed -i '0,/"stun:.*"/s/"stun:.*"/"stun:'"$FQDN"':3478"/' /usr/local/red5pro/webapps/root/red5pro-watch-party/static/script/testbed-config.js
   else
     echo "... watch party installation failed ..."
     exit 9
