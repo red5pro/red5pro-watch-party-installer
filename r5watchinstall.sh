@@ -118,12 +118,13 @@ fi
 # configure red5 for local coturn server
 if [ -d /usr/local/red5pro/webapps/live/script ]; then
   echo "... configuring red5pro for local coturn ..."
-  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:'"$FQDN"':3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-publisher-failover.js
-  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:'"$FQDN"':3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-subscriber-failover.js
-  sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:'"$FQDN"':3478" }]/g' /usr/local/red5pro/webapps/live/script/r5pro-viewer-failover.js
   sed -i 's/stun.address.*/stun.address='"$FQDN"':3478/g' /usr/local/red5pro/conf/webrtc.properties
-  # 10.3 added a new setting location
-  if [ -f /usr/local/red5pro/conf/network.properties ]; then
+  # 10.3 added new settings location
+  if [ ! -f /usr/local/red5pro/conf/network.properties ]; then
+    sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:'"$FQDN"':3478" }];/g' /usr/local/red5pro/webapps/live/script/r5pro-publisher-failover.js
+    sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:'"$FQDN"':3478" }];/g' /usr/local/red5pro/webapps/live/script/r5pro-subscriber-failover.js
+    sed -i 's/var iceServers.*/var iceServers = [{ urls: "stun:'"$FQDN"':3478" }];/g' /usr/local/red5pro/webapps/live/script/r5pro-viewer-failover.js
+  else
     sed -i 's/stun.address.*/stun.address='"$FQDN"':3478/g' /usr/local/red5pro/conf/network.properties
   fi
   systemctl restart red5pro
