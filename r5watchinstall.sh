@@ -34,6 +34,7 @@ if [ -z "$FQDN" ]; then
   echo "example: ./r5watchinstall.sh watchparty.example.org"
   exit 1
 fi
+WATCHBRANCH=$2
 
 echo "... updating system ..."
 apt update
@@ -141,7 +142,12 @@ fi
 if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
   echo "... installing watch party ..."
   cd /usr/local/red5pro/webapps/root
-  git clone https://github.com/red5pro/red5pro-watch-party.git
+  if [ -z "$WATCHBRANCH" ]; then
+    echo "... installing branch $WATCHBRANCH ..."
+    git clone -b $WATCHBRANCH https://github.com/red5pro/red5pro-watch-party.git
+  else
+    git clone https://github.com/red5pro/red5pro-watch-party.git
+  fi
   cd ~
   if [ -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
     sed -i 's/your-host-here/'"$FQDN"'/g' /usr/local/red5pro/webapps/root/red5pro-watch-party/index.js
