@@ -142,7 +142,7 @@ fi
 if [ ! -d /usr/local/red5pro/webapps/root/red5pro-watch-party ]; then
   echo "... installing watch party ..."
   cd /usr/local/red5pro/webapps/root
-  if [ -z "$WATCHBRANCH" ]; then
+  if [ ! -z "$WATCHBRANCH" ]; then
     echo "... installing branch $WATCHBRANCH ..."
     git clone -b $WATCHBRANCH https://github.com/red5pro/red5pro-watch-party.git
   else
