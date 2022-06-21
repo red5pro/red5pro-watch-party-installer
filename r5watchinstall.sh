@@ -36,7 +36,6 @@ if [ -z "$FQDN" ]; then
 fi
 WATCHBRANCH=$2
 
-
 echo "... updating system ..."
 apt update
 apt upgrade -y
