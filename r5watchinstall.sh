@@ -36,16 +36,19 @@ if [ -z "$FQDN" ]; then
 fi
 WATCHBRANCH=$2
 
+
+echo "... updating system ..."
+apt update
+apt upgrade -y
+apt -y install software-properties-common dirmngr apt-transport-https lsb-release ca-certificates
+
 # install coturn ppa
 . /etc/lsb-release
 if [ "$DISTRIB_RELEASE" = "22.04" ]; then
   echo "... configuring coturn ppa for ubuntu 22.04 ..."
   add-apt-repository ppa:ubuntuhandbook1/coturn
+  apt updtae
 fi
-
-echo "... updating system ..."
-apt update
-apt upgrade -y
 
 # install red5pro installer
 if [ ! -d /root/red5pro-installer ]; then
