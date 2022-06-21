@@ -46,7 +46,7 @@ apt -y install software-properties-common dirmngr apt-transport-https lsb-releas
 . /etc/lsb-release
 if [ "$DISTRIB_RELEASE" = "22.04" ]; then
   echo "... configuring coturn ppa for ubuntu 22.04 ..."
-  add-apt-repository ppa:ubuntuhandbook1/coturn
+  add-apt-repository -y ppa:ubuntuhandbook1/coturn
   apt updtae
 fi
 
