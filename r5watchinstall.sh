@@ -36,6 +36,13 @@ if [ -z "$FQDN" ]; then
 fi
 WATCHBRANCH=$2
 
+# install coturn ppa
+. /etc/lsb-release
+if [ "$DISTRIB_RELEASE" = "22.04" ]; then
+  echo "... configuring coturn ppa for ubuntu 22.04 ..."
+  add-apt-repository ppa:ubuntuhandbook1/coturn
+fi
+
 echo "... updating system ..."
 apt update
 apt upgrade -y
